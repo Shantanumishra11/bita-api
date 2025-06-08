@@ -1,0 +1,131 @@
+This file contains the test results against different requests
+
+Test Case 1: Using calendar_rule=quarterly, filter_rule=top_n, weighting=equal
+Request:
+{
+  "calendar_rule": "quarterly",
+  "quarterly_calendar": {"initial_date": "2024-01-01"},
+  "custom_calendar": null,
+  "filter_rule": "top_n",
+  "top_n_filter": {"N": 5, "D": "market_capitalization"},
+  "value_filter": null,
+  "weighting": {"method": "equal"},
+  "data_path": "data"
+}
+
+Response:
+{
+  "execution_time_seconds": 0.2263,
+  "weights": {
+    "2024-03-31": {
+      "15": 0.2,
+      "21": 0.2,
+      "544": 0.2,
+      "547": 0.2,
+      "891": 0.2
+    },
+    "2024-06-30": {
+      "285": 0.2,
+      "412": 0.2,
+      "529": 0.2,
+      "537": 0.2,
+      "574": 0.2
+    },
+    "2024-09-30": {
+      "104": 0.2,
+      "518": 0.2,
+      "525": 0.2,
+      "710": 0.2,
+      "906": 0.2
+    },
+    "2024-12-31": {
+      "332": 0.2,
+      "427": 0.2,
+      "570": 0.2,
+      "707": 0.2,
+      "891": 0.2
+    }
+  }
+}
+================================================================
+
+Test Case 2: Using calendar_rule=custom, filter_rule=top_n, weighting=equal
+
+Request:
+{
+  "calendar_rule": "custom",
+  "quarterly_calendar":null,
+  "custom_calendar": {"dates":["2024-01-01"]},
+  "filter_rule": "top_n",
+  "top_n_filter": {
+    "N": 5,
+    "D": "market_capitalization"
+  },
+  "value_filter": null,
+  "weighting": {
+    "method": "equal"
+  },
+  "data_path": "data"
+}
+
+Response:
+{
+  "execution_time_seconds": 0.1119,
+  "weights": {
+    "2024-01-01": {
+      "126": 0.2,
+      "149": 0.2,
+      "462": 0.2,
+      "484": 0.2,
+      "670": 0.2
+    }
+  }
+}
+===================================================================
+
+Test Case 3: Using calendar_rule=custom, filter_rule=top_n, weighting=optimized
+Request:
+{
+  "calendar_rule": "custom",
+  "custom_calendar": {
+    "dates": ["2024-03-01", "2024-06-01", "2024-09-01"]
+  },
+  "quarterly_calendar": null,
+  "filter_rule": "top_n",
+  "top_n_filter": {
+    "N": 4,
+    "D": "market_capitalization"
+  },
+  "value_filter": null,
+  "weighting": {
+    "method": "optimized",
+    "D": "prices",
+    "lb": 0.1,
+    "ub": 0.5
+  },
+  "data_path": "data"
+}
+Response:
+{
+  "execution_time_seconds": 0.1854,
+  "weights": {
+    "2024-03-01": {
+      "130": 0.274286,
+      "199": 0.205714,
+      "355": 0.154286,
+      "626": 0.365714
+    },
+    "2024-06-01": {
+      "180": 0.205714,
+      "299": 0.154286,
+      "393": 0.274286,
+      "951": 0.365714
+    },
+    "2024-09-01": {
+      "145": 0.274286,
+      "362": 0.365714,
+      "503": 0.205714,
+      "540": 0.154286
+    }
+  }
+}
